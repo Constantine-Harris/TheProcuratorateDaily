@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>核心代码</title>
+
+</head>
+<body>
+    <div class="selfnav">
+        <div class="main">
+            <img src="news-zgjcb-8507-20180425-m-001-300.jpg" usemap="#map-path">
+            <map name="map-path" id="map-path">
+                <area href="#" name="" class="areablock" shape="poly" coords="2.34,80.34,275.18,80.34,275.18,227.49,2.34,227.49">
+                <area href="#" name="" class="areablock" shape="poly" coords="3.67,242.97,276.78,242.97,276.78,394.72,3.67,394.72">
+                <area href="#" name="" class="areablock" shape="poly" coords="3.67,407.17,275.18,407.17,275.18,479.09,3.67,479.09">
+                <area href="#" name="" class="areablock" shape="poly" coords="2.42,489.87,274.99,489.87,274.99,550.79,2.42,550.79">
+                <area href="#" name="" class="areablock" shape="poly" coords="285.29,85.22,386.33,85.22,386.33,295.65,285.29,295.65">
+                <area href="#" name="" class="areablock" shape="poly" coords="285.29,309.62,386.33,309.62,386.33,550.79,285.29,550.79">
+            </map>
+        </div>
+    </div>
+    <a href="#/mm">mm</a>
+    <a href="#cc">cc</a>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        console.log(window.onload)
+        var $imgNav = $('.areablock');
+        $imgNav.each(function(inedx,ele){
+            console.log(ele.coords);
+        });
+        window.addEventListener('hashchange',function(e){
+            console.log(e.newURL)
+            console.log(e.oldURL)
+        })
+    </script>
+</body>
+</html>
