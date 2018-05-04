@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>检察日报社多媒体数字报刊平台</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header></header>
+
+<section>
+    <div class="nav-self" id="nav-main">
+        <div class="main">
+            <img usemap="#map-path" id="img">
+            <canvas></canvas>
+            <map name="map-path" id="map-path"></map>
+            <div class="main-title"></div>
+        </div>
+        <div class="nav-self-middle">
+        </div>
+        <div class="nav-self-bottom">
+            <h4>标题导航</h4>
+            <ul id="nav-self"></ul>
+        </div>
+    </div>
+    <div class="nav-pages">
+        <h4>版面目录</h4>
+        <ul id="nav-pages"></ul>
+    </div>
+    <div class="nav-days"></div>
+    <div class="container" id="container">
+    </div>
+</section>
+<div id="error">
+    页面不存在
+</div>
+<footer></footer>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="js/getData.js"></script>
+<script>
+
+
+
+    $(function(){
+        function updata(){
+            var path = location.hash.trim().substring(1).split('/');
+            if(path.length == 4){
+                //location.hash = path.join('/');
+                if(path[2] == path[3]) get.init(path.slice(0, 3).join('/'));
+                else {
+                    var last = path.pop();
+                    get.init(path.join('/'), Number(last.slice(last.lastIndexOf('_') + 1)));
+                }
+            }else {
+                get.error();
+            }
+        }
+        $(window).on('hashchange',function(){
+            updata();
+        });
+        if(!location.hash) {
+            location.hash = '2018/20180425/20180425_001/20180425_001';
+            get.init('2018/20180425/20180425_001');
+        }else {
+            updata();
+        }
+
+        /* 事件绑定 */
+        $('#nav-main')
+            .on('click', 'area, li', function(){
+            path = location.hash.trim().substring(1).split('/');
+            path.pop();
+            location.hash = path.join('/') + '/' + path[path.length - 1] + '_' + ($(this).index() + 1);
+            console.log(this);
+            console.log($(this).index())
+        })
+            .on('mouseover', 'area, li', function(){
+                var path = $(this).data('path').split(','),
+                    canvas = $('canvas')[0],
+                    ctx = canvas.getContext('2d');
+                /* 清屏 */
+                console.log(path);
+                //canvas.width = canvas.width;
+                ctx.beginPath;
+                ctx.moveTo(parseFloat(path[0]), parseFloat(path[1]));
+                for(var i = 2; i < path.length; i++) {
+                    ctx.lineTo(parseFloat(path[i]), parseFloat(path[++i]));
+                }
+                ctx.closePath();
+                ctx.strokeStyle = '#f00';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            })
+                .on('mouseleave', 'area, li', function(){
+                var canvas = $('canvas')[0];
+                canvas.width = canvas.width;
+            });
+        $('#nav-pages').on('click', 'li > a:first-child', function(){
+            path = location.hash.trim().substring(1).split('/');
+            last = path[1] + '_' + ('00' + ($(this).parent().index() + 1)).substr(-3);
+            url = path.slice(0,2);
+            url.push(last, last);
+            location.hash = url.join('/');
+        });
+
+    })
+
+</script>
+</body>
+</html>
