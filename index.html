@@ -27,6 +27,7 @@
     <div class="nav-pages">
         <h4>版面目录</h4>
         <ul id="nav-pages"></ul>
+        <img id="pages-img"></img>
     </div>
     <div class="nav-days"></div>
     <div class="container" id="container">
@@ -40,9 +41,6 @@
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script src="js/getData.js"></script>
 <script>
-
-
-
     $(function(){
         function updata(){
             var path = location.hash.trim().substring(1).split('/');
@@ -76,13 +74,14 @@
             console.log(this);
             console.log($(this).index())
         })
+
             .on('mouseover', 'area, li', function(){
+                /* 画选中框 */
                 var path = $(this).data('path').split(','),
                     canvas = $('canvas')[0],
                     ctx = canvas.getContext('2d');
-                /* 清屏 */
+                  /* 清屏 */
                 console.log(path);
-                //canvas.width = canvas.width;
                 ctx.beginPath;
                 ctx.moveTo(parseFloat(path[0]), parseFloat(path[1]));
                 for(var i = 2; i < path.length; i++) {
@@ -92,18 +91,45 @@
                 ctx.strokeStyle = '#f00';
                 ctx.lineWidth = 2;
                 ctx.stroke();
+                /* 画选中框结束 */
+                /* 给浮动标题填数据 */
+                var title = $(this).data('title');
+                if(title) $('.main-title').show().html(title);
             })
-                .on('mouseleave', 'area, li', function(){
+            .on('mouseleave', 'area, li', function(){
                 var canvas = $('canvas')[0];
                 canvas.width = canvas.width;
+                $('.main-title').hide();
+            })
+            .on('mousemove', function(e){
+                $('.main-title').css({
+                    left: e.pageX + 10,
+                    top: e.pageY + 10
+                })
             });
-        $('#nav-pages').on('click', 'li > a:first-child', function(){
+
+        $('#nav-pages')
+            .on('click', 'li > a:first-child', function(){
             path = location.hash.trim().substring(1).split('/');
             last = path[1] + '_' + ('00' + ($(this).parent().index() + 1)).substr(-3);
             url = path.slice(0,2);
             url.push(last, last);
             location.hash = url.join('/');
-        });
+        })
+            .on('mouseover', 'a:first-child', function() {
+                var src = $(this).next().attr('href').replace(/pdf/i,'jpg');
+                console.log(src)
+                $('#pages-img').show().attr('src',src);
+            })
+            .on('mouseleave', 'a:first-child', function() {
+                $('#pages-img').hide();
+            })
+            .on('mousemove', function(e) {
+                $('#pages-img').css({
+                   left: e.pageX + 10,
+                   top: e.pageY
+                });
+            });
 
     })
 

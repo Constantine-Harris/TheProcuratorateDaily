@@ -81,7 +81,7 @@ get.pageData = function(url, index) {
             var html1 = '',
                 html2 = '';
             data.coords.forEach(function(item, i){
-                html1 +=  '<area href="javascript:" shape="poly" coords="'+ item + '" data-path=' + item + '">';
+                html1 +=  '<area href="javascript:" shape="poly" coords="'+ item + '" data-path="' + item + '" data-title="' + data.navSelf[i] + '">';
                 html2 += '<li data-path="' + item + '">' + data.navSelf[i] + '</li>';
             });
             $('#map-path').html(html1);
