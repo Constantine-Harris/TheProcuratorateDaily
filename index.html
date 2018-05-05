@@ -27,7 +27,7 @@
     <div class="nav-pages">
         <h4>版面目录</h4>
         <ul id="nav-pages"></ul>
-        <img id="pages-img"></img>
+        <img id="pages-img">
     </div>
     <div class="nav-days"></div>
     <div class="container" id="container">
@@ -65,17 +65,32 @@
             updata();
         }
 
-        /* 事件绑定 */
+        /* 当前版面事件绑定 */
         $('#nav-main')
-            .on('click', 'area, li', function(){
-            path = location.hash.trim().substring(1).split('/');
-            path.pop();
-            location.hash = path.join('/') + '/' + path[path.length - 1] + '_' + ($(this).index() + 1);
-            console.log(this);
-            console.log($(this).index())
+            .on('click', 'area, .nav-self-bottom  li, .nav-self-middle  a', function(){
+                if(this.tagName.toLowerCase() == 'a') {
+                    if($(this).html() == '上一版') {
+                        get.modul(-1, function(place){
+                            return place > 1;
+                        }, function(){
+                            alert('没有上一版了');
+                        });
+                    }
+                    if($(this).html() == '下一版') {
+                        get.modul(1, function(place){
+                            return place < get.num;
+                        }, function(){
+                            alert('没有下一版了');
+                        });
+                    }
+                    return;
+                }
+                path = location.hash.trim().substring(1).split('/');
+                path.pop();
+                location.hash = path.join('/') + '/' + path[path.length - 1] + '_' + ($(this).index() + 1);
+                console.log($(this).index())
         })
-
-            .on('mouseover', 'area, li', function(){
+            .on('mouseover', 'area, .nav-self-bottom  li', function(){
                 /* 画选中框 */
                 var path = $(this).data('path').split(','),
                     canvas = $('canvas')[0],
@@ -95,11 +110,14 @@
                 /* 给浮动标题填数据 */
                 var title = $(this).data('title');
                 if(title) $('.main-title').show().html(title);
+                $('.nav-self-bottom  li').eq($(this).index()).addClass('active');
+                console.log($('.nav-self-bottom  li').eq($(this).index()))
             })
-            .on('mouseleave', 'area, li', function(){
+            .on('mouseleave', 'area, .nav-self-bottom  li', function(){
                 var canvas = $('canvas')[0];
                 canvas.width = canvas.width;
                 $('.main-title').hide();
+                $('.nav-self-bottom  li').eq($(this).index()).removeClass('active');
             })
             .on('mousemove', function(e){
                 $('.main-title').css({
@@ -108,6 +126,7 @@
                 })
             });
 
+        /* 版面目录事件 */
         $('#nav-pages')
             .on('click', 'li > a:first-child', function(){
             path = location.hash.trim().substring(1).split('/');
@@ -118,10 +137,12 @@
         })
             .on('mouseover', 'a:first-child', function() {
                 var src = $(this).next().attr('href').replace(/pdf/i,'jpg');
-                console.log(src)
                 $('#pages-img').show().attr('src',src);
             })
             .on('mouseleave', 'a:first-child', function() {
+                $('#pages-img').hide();
+            })
+            .on('click', 'a:first-child', function() {
                 $('#pages-img').hide();
             })
             .on('mousemove', function(e) {

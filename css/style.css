@@ -18,70 +18,7 @@ section {
     display: flex;
     align-items: start;
 }
-.nav-pages {
-    margin: 10px;
-    width: 300px;
-    line-height: 2;
-    font-size: 14px;
-    border: 1px solid #aaa;
-}
-.nav-pages h4 {
-    margin: 0;
-    padding: 0 30px;
-    border-bottom: 1px solid #aaa;
-}
-.nav-pages ul {
-    margin-top: 0;
-    padding: 10px;
-    height: 450px;
-    overflow-y: scroll;
-}
-.nav-pages li {
-    display: flex;
-}
-.nav-pages a:first-child {
-    flex: 1;
-}
-.nav-pages a:last-child {
-    flex: 0;
-    margin: 0 10px 0 5px;
-}
-.nav-pages a {
-    color: #500;
-}
-.nav-pages img {
-    display: none;
-    width: 130px;
-    position: fixed;
-    border: 2px solid #56bcff;
-}
-.nav-pages.hide {
-    position: absolute;
-    top: -85px;
-    left: 412px;
-    width: auto;
-    border: 0;
-}
-.nav-pages.hide > h4 {
-    width: 14px;
-    padding: 5px;
-    line-height: 1.2;
-    background: beige;
-    cursor: pointer;
-}
-.nav-pages.hide:hover > ul {
-    display: block;
-}
-.nav-pages.hide > ul {
-    display: none;
-    position: absolute;
-    top: 5px;
-    left: 1px;
-    background: #fff;
-    border: 1px solid #900;
-    width: 300px;
-    height: 360px;
-}
+
 .nav-self {
     margin-left: 20px;
     margin-top: -60px;
@@ -151,7 +88,81 @@ section {
     color: #333;
     border-bottom: 1px dotted #888;
 }
+.nav-self-bottom li.active {
+    background: #f3f3f3;
+    color: #900;
+}
+
+.nav-pages {
+    margin: 10px;
+    width: 300px;
+    line-height: 2;
+    font-size: 14px;
+    border: 1px solid #aaa;
+}
+.nav-pages h4 {
+    margin: 0;
+    padding: 0 30px;
+    border-bottom: 1px solid #aaa;
+}
+.nav-pages ul {
+    margin-top: 0;
+    padding: 10px;
+    height: 450px;
+    overflow-y: scroll;
+}
+.nav-pages li {
+    display: flex;
+}
+.nav-pages a:first-child {
+    flex: 1;
+}
+.nav-pages a:last-child {
+    flex: 0;
+    margin: 0 10px 0 5px;
+}
+.nav-pages a {
+    color: #500;
+}
+.nav-pages a.active {
+    color: #fff;
+    background: #3972cd;
+}
+.nav-pages img {
+    display: none;
+    width: 130px;
+    position: fixed;
+    border: 2px solid #56bcff;
+}
+.nav-pages.hide {
+    position: absolute;
+    top: -85px;
+    left: 412px;
+    width: auto;
+    border: 0;
+}
+.nav-pages.hide > h4 {
+    width: 14px;
+    padding: 5px;
+    line-height: 1.2;
+    background: beige;
+    cursor: pointer;
+}
+.nav-pages.hide:hover > ul {
+    display: block;
+}
+.nav-pages.hide > ul {
+    display: none;
+    position: absolute;
+    top: 5px;
+    left: 1px;
+    background: #fff;
+    border: 1px solid #900;
+    width: 300px;
+    height: 360px;
+}
 .container {
+    flex: 1;
     padding: 0 20px;
 }
 

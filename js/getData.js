@@ -1,12 +1,7 @@
 var get = {};
 get.err = false;
 get.error = function () {
-    get.err = true;
-    console.log('error');
-    $('#error').show();
-    $(window).on('hashchange', function(){
-        $('#error').hide();
-    })
+    location.replace('/error.html');
 };
 /* 从新包装ajax */
 get.get = function(url, success, error){
@@ -25,8 +20,9 @@ get.init = function (url, index) {
     if(path.length == 3) {
         get.hideContent();
         get.showNav();
-        get.dayData(path[0] + '/' + path[1]);
-        get.pageData(path[0] + '/' + path[1], path[2]);
+        get.dayData(path[0] + '/' + path[1], function(){
+            get.pageData(path[0] + '/' + path[1], path[2]);
+        });
         if(index) {
             get.hideNav();
             get.showContent();
@@ -39,8 +35,7 @@ get.init = function (url, index) {
 /* 输出日报版面目录
 *  url 是2级文件路径 如2018/20180425
 * */
-get.dayData = function (url) {
-    if(get.err) return;
+get.dayData = function (url, modul) {
     var path = url.trim().split('/'),
         lastPath = path[path.length - 1];
     get.get(url + '/' + lastPath + '.json', function(data){
@@ -50,7 +45,9 @@ get.dayData = function (url) {
                 html += '<li><a href="javascript:">第' + ('0' + ++i).substr(-2) + '版：' + item.title + '</a><a href="' + url + '/' + lastPath + '_' + ('00' + i).substr(-3) + '/' + item.file + '">test</a></li>';
             });
             $('#nav-pages').html(html);
+            get.num = data.length;
         }
+        modul ? modul() : '';
     });
 };
 
@@ -59,7 +56,6 @@ get.dayData = function (url) {
 *  index 是版面变号 如 index=1 => 20180425_001.json
 * */
 get.pageData = function(url, index) {
-    if(get.err) return;
     var path = url.trim().split('/'),
         lastPath = path[path.length - 1],
         childPath = lastPath + '_' + ('00' + index).substr(-3),
@@ -87,6 +83,11 @@ get.pageData = function(url, index) {
             $('#map-path').html(html1);
             $('#nav-self').html(html2);
         }
+        var title = $('#nav-pages li > a:first-child');
+
+        $('#nav-pages li > a:first-child').each(function(){
+            $(this).html() == ('第' + (0 + index).substr(-2) + '版：' + data.title) ? $(this).addClass('active') : '';
+        });
     } );
 };
 
@@ -106,6 +107,26 @@ get.moduleData = function(url,index) {
         });
         $('#container').html(html);
     });
+};
+
+/*
+*  上下版切换
+*  add = 1 下一版
+*  add = -1 上一版
+*  can函数返回为真允许切换 参数place表示当前版面编号
+*  end函数 不允许切换时执行
+* */
+get.modul = function(add, can, end) {
+    var url = location.hash.trim().substring(1).split('/').slice(0,3);
+    var last = url.pop();
+    var place = Number(last.slice(last.lastIndexOf('_') + 1));
+    if(can(place)) {
+        last = url[1] + '_' + ('00' + (place + add)).substr(-3);
+        url.push(last, last);
+        location.hash = url.join('/');
+    } else {
+        end ? end() : '';
+    }
 };
 get.hideNav = function() {
     $('.nav-pages').addClass('hide');
